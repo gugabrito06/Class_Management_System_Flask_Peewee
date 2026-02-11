@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard</title>
+  <style>
+
+    * {
+        box-sizing: border-box;
+      }
+
+    body{ 
+      font-family: sans-serif; 
+      padding: 20px; 
+      background: #eef2f7; 
+    }
+
+    h1{ 
+      margin-bottom: 20px;
+      margin-top: 0; 
+    }
+
+    section{ 
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: white; 
+      padding: 16px; 
+      margin-bottom: 20px; 
+      border-radius: 8px; 
+      box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+      align-items: center;
+    }
+
+    #section-classes {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: lightgray; 
+      padding: 16px; 
+      margin-bottom: 20px; 
+      border-radius: 8px; 
+      box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+      align-items: center;
+    }
+
+    input, select{ 
+      margin-bottom: 10px; 
+      width: 100%; 
+      padding: 8px; 
+    }
+
+    button{ 
+      padding: 8px 12px;
+      cursor: pointer;
+      width: auto;
+      background: #28a745; 
+      color: white; 
+      border: none; 
+      border-radius: 4px; 
+      align-self: center;
+    }
+
+    button:hover{ 
+      background: #218838; 
+    }
+
+    #div1{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    h2{
+      margin-top: 8px;
+    }
+
+    .flash {
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .flash.success{
+      background-color: #ade49b;
+      color: rgb(14, 219, 14);
+      border: 1px solid rgb(14, 219, 14);
+    }
+
+    .flash.error{
+      background-color: #ffe6e6;
+      color: #cc0000;
+      border: 1px solid #cc0000;
+    }
+
+    #addteacher, #addstudent, #addclass {
+      width: 100%;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #buttonclass, #buttonstudent, #buttonteacher {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #selectclasses {
+      font-weight: bold;
+    }
+    
+    #select-classes {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    #class-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px; /* Espaçamento entre os itens */
+    }
+
+    .class-item {
+      display: flex;
+      align-items: center;
+      gap: 8px; /* Espaçamento entre o checkbox e o texto */
+    }
+
+    .class-item input[type="checkbox"] {
+      margin: 0;
+    }
+
+    .class-item label {
+      flex: none;
+    }
+
+    section form {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    #logoutbutton {
+      padding: 8px 12px;
+      background-color: #dc3545;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #logoutbutton:hover {
+      background-color: #c82333;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="div1">
+  <h1>Admin Dashboard</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
+  <section>
+    <form action="/add_prof" method="POST">
+      <h2 id="addteacher">Add Teacher</h2>
+      <input type="text" name="prof_name" placeholder="Teacher Name" required>
+      <input type="email" name="prof_login" placeholder="Email" required>
+      <input type="password" name="prof_password" placeholder="Password" required>
+      <div id="buttonteacher">
+        <button type="submit">Add Teacher</button>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <form action="/add_student" method="POST">
+      <h2 id="addstudent">Add Student</h2>
+      <input type="text" name="student_name" placeholder="Student Name" required>
+      <input type="email" name="student_email" placeholder="Email" required>
+      <input type="text" name="student_phone" placeholder="Phone Number" required>
+      <input type="date" name="student_birthdate" placeholder="Birthdate" required>
+      <div id="select-classes"><label id="selectclasses">Select Classes:</label></div>
+      <section id="section-classes">
+        <div id="class-list">
+          {% for class in classes %}
+          <div class="class-item">
+              <label>{{ class.class_name }} - {{ class.date }} - {{ class.time }}, {{ class.id_user.name }}</label>
+              <input type="checkbox" name="class_ids" value="{{ class.id_class }}">
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      <div id="buttonstudent">
+        <button type="submit">Add Student</button>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <form action="/add_class" method="POST">
+      <h2 id="addclass">Schedule Class</h2>
+      <input type="text" name="class_name" placeholder="Class Title" required>
+      <input type="date" name="class_date" placeholder="Class Date" required>
+      <input type="time" name="class_time" placeholder="Class Time" required>
+      <select name="teacher_login" required>
+        <option value="" disabled selected>Select Teacher</option>
+        {% for teacher in teachers %}
+          <option value="{{ teacher.login }}">{{ teacher.name }}</option>
+        {% endfor %}
+      </select>
+      <div id="buttonclass">
+        <button type="submit">Add Class</button>
+      </div>
+    </form>
+  </section>
+  <div id="logout-button">
+    <a href="{{ url_for('logout') }}" id="logoutbutton">Logout</a>
+  </div>
+  </div>
+</body>
+</html>
