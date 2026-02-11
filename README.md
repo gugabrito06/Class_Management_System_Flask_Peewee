@@ -73,7 +73,7 @@ Follow these steps to set up and run the project locally.
 
 <div align="center">
   <figure>
-    <img src="https://github.com/user-attachments/assets/13b3a898-dcc5-4bb9-8c5f-18b05c723543" width="500">
+    <img src="https://github.com/user-attachments/assets/12108f41-6fde-4b72-930b-b1f24d1e0a41" width="500">
     <figcaption>
       <br>
       <b>Project Structure</b>
@@ -81,7 +81,6 @@ Follow these steps to set up and run the project locally.
   </figure>
 </div>
 <br><br>
-
 
 
 
