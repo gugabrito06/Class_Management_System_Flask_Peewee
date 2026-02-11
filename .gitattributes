@@ -1,0 +1,2 @@
+# Forçar o GitHub a ignorar HTML na contagem de linguagens
+*.html linguist-detectable=false
